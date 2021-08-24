@@ -1,50 +1,77 @@
 <template>
-  <div class="layout">
-    <header class="header">
-      <strong>
-        <g-link to="/">{{ $static.metadata.siteName }}</g-link>
-      </strong>
-      <nav class="nav">
-        <g-link class="nav__link" to="/">Home</g-link>
-        <g-link class="nav__link" to="/about/">About</g-link>
-      </nav>
+  <div class="layout sticky-header">
+    <header class="header sticky">
+      <div class="container">
+        <div class="left">
+          <g-link to="/">
+            <img :src="GRIDSOME_API_URL + logo.url" alt="logo" class="logo" />
+          </g-link>
+        </div>
+        <nav class="nav right">
+          <g-link class="nav__link" to="/journal">Journal</g-link>
+          <g-link class="nav__link" to="/contact">Say Hi!</g-link>
+        </nav>
+      </div>
     </header>
-    <slot/>
+    <slot />
+
+    <footer class="footer">
+      <div class="container">
+        <span data-v-07acb5f8="">Copyright © 2021 Duyb</span>
+      </div>
+    </footer>
   </div>
 </template>
 
 <static-query>
 query {
-  metadata {
-    siteName
+  generals: allStrapiGeneral {
+    edges {
+      node {
+        logo {
+          url
+        }
+      }
+    }
   }
 }
 </static-query>
 
-<style>
-body {
-  font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  margin:0;
-  padding:0;
-  line-height: 1.5;
+<script>
+export default {
+  name: 'Default',
+  computed: {
+    logo() {
+      return this.$static.generals.edges[0].node.logo[0];
+    },
+  },
+};
+</script>
+
+<style scoped>
+.nav > .nav__link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 4px;
+  margin-right: 3rem;
+  padding-bottom: 4px;
+  border-bottom: 1px solid;
+  border-color: transparent;
+  transition: border 0.15s;
 }
 
-.layout {
-  max-width: 760px;
-  margin: 0 auto;
-  padding-left: 20px;
-  padding-right: 20px;
+.nav > .nav__link:last-of-type {
+  margin: 0;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  height: 80px;
+.nav > .nav__link.active,
+.nav > .nav__link:hover {
+  border-color: inherit;
 }
 
-.nav__link {
-  margin-left: 20px;
+.footer {
+  font-size: 0.8rem;
+  padding: 6rem 0;
 }
 </style>
